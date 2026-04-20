@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Galereya</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background:#fdf7f7;
+    text-align:center;
+}
+
+header {
+    background:#7b0f1a;
+    color:white;
+    padding:20px;
+}
+
+/* SLIDER */
+.slider {
+    width: 80%;
+    margin: 40px auto;
+    overflow:hidden;
+    border-radius: 15px;
+    position: relative;
+}
+
+.slides {
+    display:flex;
+    transition: transform 0.6s ease-in-out;
+}
+
+/* IMAGES + VIDEOS */
+.slides img,
+.slides video {
+    width: 100%;
+    flex-shrink: 0;
+    height: 400px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* BUTTONS */
+.btn {
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+    background: rgba(123,15,26,0.7);
+    color:white;
+    border:none;
+    padding:10px 15px;
+    cursor:pointer;
+    font-size:20px;
+    border-radius:50%;
+}
+
+#prev { left:10px; }
+#next { right:10px; }
+
+.back {
+    margin:20px;
+}
+
+.back a {
+    color:#7b0f1a;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+/* LIGHTBOX */
+.lightbox {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.9);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+.lightbox img,
+.lightbox video {
+    max-width:90%;
+    max-height:80%;
+    border-radius:10px;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+    <h1>Klinika galereyasi</h1>
+    <p>Ko‘z operatsiyalari, diagnostika va zamonaviy texnologiyalar</p>
+</header>
+
+<div class="slider">
+
+<div class="slides" id="slides">
+
+<!-- ================= 10 IMAGES ================= -->
+<img src="https://images.unsplash.com/photo-1580281657527-47f249e8f4df"> <!-- eye exam -->
+<img src="https://images.unsplash.com/photo-1579154204601-01588f351e67"> <!-- eye check -->
+<img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118"> <!-- laser equipment -->
+<img src="https://images.unsplash.com/photo-1581091215367-59ab6b4d7f72"> <!-- medical device -->
+<img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b"> <!-- surgery -->
+<img src="https://images.unsplash.com/photo-1588776814546-ec7e7c4c1c2e"> <!-- clinic -->
+<img src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b"> <!-- diagnosis -->
+<img src="https://images.unsplash.com/photo-1580281780460-82d277b0e2f0"> <!-- eye close -->
+<img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=1"> <!-- laser -->
+<img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=1"> <!-- surgery -->
+
+<!-- ================= 5 VIDEOS ================= -->
+<video muted>
+    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+</video>
+
+<video muted>
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+</video>
+
+<video muted>
+    <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+</video>
+
+<video muted>
+    <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
+</video>
+
+<video muted>
+    <source src="https://samplelib.com/lib/preview/mp4/sample-10s.mp4" type="video/mp4">
+</video>
+
+</div>
+
+<button class="btn" id="prev">‹</button>
+<button class="btn" id="next">›</button>
+
+</div>
+
+<div class="back">
+    <a href="index.html">⬅ Bosh sahifaga qaytish</a>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <img id="lightboxImg" style="display:none;">
+    <video id="lightboxVideo" controls style="display:none;"></video>
+</div>
+
+<script>
+
+let index = 0;
+const slides = document.getElementById("slides");
+const items = slides.children;
+const total = items.length;
+
+function showSlide(i) {
+    if (i < 0) index = total - 1;
+    else if (i >= total) index = 0;
+    else index = i;
+
+    slides.style.transform = `translateX(-${index * 100}%)`;
+}
+
+document.getElementById("next").onclick = () => showSlide(index + 1);
+document.getElementById("prev").onclick = () => showSlide(index - 1);
+
+setInterval(() => {
+    showSlide(index + 1);
+}, 3500);
+
+/* LIGHTBOX */
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxVideo = document.getElementById("lightboxVideo");
+
+Array.from(items).forEach(item => {
+    item.addEventListener("click", () => {
+
+        lightbox.style.display = "flex";
+
+        if (item.tagName === "IMG") {
+            lightboxImg.style.display = "block";
+            lightboxVideo.style.display = "none";
+            lightboxImg.src = item.src;
+        }
+
+        if (item.tagName === "VIDEO") {
+            lightboxVideo.style.display = "block";
+            lightboxImg.style.display = "none";
+            lightboxVideo.src = item.querySelector("source").src;
+            lightboxVideo.play();
+        }
+    });
+});
+
+lightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
+    lightboxVideo.pause();
+});
+
+</script>
+
+</body>
+</html>
